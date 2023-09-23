@@ -51,12 +51,15 @@ void cadastrarConta(char * nome, int numero, int senha, float saldo){
                         aux -> prox = novo;
                         aux = novo->prox;
                     } else{
-                        novo ->ant->prox = aux;
-                        novo->prox = aux->prox;
-                        aux->ant = novo->ant;
-                        novo-> ant = aux;
-                        aux->prox = novo;
-                        aux = novo ->prox;
+                        if(novo ->prox ->saldo > novo->saldo){
+                            novo ->ant->prox = aux;
+                            novo->prox = aux->prox;
+                            aux ->prox ->ant = novo;
+                            aux->ant = novo->ant;
+                            novo-> ant = aux;
+                            aux->prox = novo;
+                            aux = novo ->prox;
+                        }
                     } 
                     if(novo == fim){
                         break;
@@ -67,51 +70,42 @@ void cadastrarConta(char * nome, int numero, int senha, float saldo){
 }
 
   
-
-
-
-/*
-void remover(int pos){
-    
-    if(pos >= 0 && pos < tam){
+void removerConta(int numero){
         
-        if(inicio == NULL){
-            printf("vazia! :/\n");
-        }else if (pos == 0){ 
-            //inicio da lista - constante :D
-            NO *lixo = inicio;
-            inicio = inicio->prox; 
-            inicio->ant = NULL;
+    if(inicio == NULL){
+        printf("vazia! :/\n");
+    } else{
+        if(numero == inicio->numero){
+            NO* lixo = inicio;
+            inicio->prox->ant = NULL;
+            inicio = inicio->prox;
             free(lixo);
-            tam--;
-        
-        }else if(pos == tam - 1){//fim - constante! :D
-
-            NO *lixo = fim;
+        } else if(numero == fim->numero){
+            NO*lixo = fim;
+            fim -> ant->prox = NULL;
             fim = fim->ant;
-            fim->prox = NULL;
             free(lixo);
-            tam--;            
-
-
         }else{
-            // meio! Linear :/
             NO *lixo = inicio;
-            for(int i=0; i< pos; i++){
+            while(numero != lixo ->numero){
                 lixo = lixo->prox;
             }
-
-            lixo->ant->prox = lixo->prox;
-            lixo->prox->ant = lixo->ant;
+            lixo -> ant->prox = lixo->prox;
+            lixo ->prox ->ant = lixo -> ant;
+            
             free(lixo);
-            tam--;
         }
-        
-        
     }
-    
 }
-*/
+
+
+
+
+
+
+
+
+
 
 void visualizar(){
     printf("Imprimindo a lista...\n");
@@ -128,8 +122,14 @@ int main(){
     cadastrarConta("Milena", 2, 2345, 4500.5);
     cadastrarConta("João", 3, 2005, 2000.7);
     cadastrarConta("salazar", 4, 2209, 3000);
-    cadastrarConta("jhonas", 4, 2209, 2000);
-   
+    cadastrarConta("jhonas", 5, 3672, 2000);
+    cadastrarConta("tuco", 6, 3090, 3000 );
+    visualizar();
+    printf(" \n");
+    
+    removerConta(4);
+    removerConta(3);
+    removerConta(5);
     visualizar();
 
   return 0;

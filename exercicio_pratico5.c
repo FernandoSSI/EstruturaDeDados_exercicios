@@ -31,39 +31,39 @@ void cadastrarConta(char * nome, int numero, int senha, float saldo){
             inicio = novo; //constante :D
             fim = novo;
         } else{
-           NO *aux = inicio;
-           
-           if(novo->saldo > aux-> saldo){
-               aux->ant = novo;
-               novo -> prox = aux;
-               novo -> ant = NULL;
-               inicio = novo;
-           } else{
-               while(novo->saldo < aux-> saldo){
-                   if(novo->saldo < aux-> saldo && aux->ant==NULL){
-                       novo -> prox = aux-> prox;
-                       novo -> ant = aux;
-                       aux->prox->ant= novo;
-                       aux -> prox = novo;
-                       aux = novo->prox;
-                  }  else if(novo->saldo < aux-> saldo && novo->prox !=NULL) {
-                       novo ->ant->prox = aux;
-                       novo->prox = aux->prox;
-                       aux->ant = novo->ant;
-                       novo-> ant = aux;
-                       aux->prox = novo;
-                       if(novo -> prox !=NULL){
-                            aux = novo ->prox;
-                       }
-                   } else {
-                       break;
-                   }
-               }
-           }
-           
-        
+            NO *aux = inicio;
+            if(novo->saldo > aux-> saldo){
+                aux->ant = novo;
+                novo -> prox = aux;
+                novo -> ant = NULL;
+                inicio = novo;
+            }else if(novo ->saldo < fim-> saldo){
+                fim -> prox = novo;
+                novo ->prox = NULL;
+                novo->ant = fim;
+                fim = novo;
+           }else{
+                while(novo->saldo < aux-> saldo){
+                    if(aux == inicio){
+                        novo -> prox = aux-> prox;
+                        novo -> ant = aux;
+                        aux->prox->ant= novo;
+                        aux -> prox = novo;
+                        aux = novo->prox;
+                    } else{
+                        novo ->ant->prox = aux;
+                        novo->prox = aux->prox;
+                        aux->ant = novo->ant;
+                        novo-> ant = aux;
+                        aux->prox = novo;
+                        aux = novo ->prox;
+                    } 
+                    if(novo == fim){
+                        break;
+                    }
+                }
+            }
         }
-    
 }
 
   
@@ -128,6 +128,7 @@ int main(){
     cadastrarConta("Milena", 2, 2345, 4500.5);
     cadastrarConta("João", 3, 2005, 2000.7);
     cadastrarConta("salazar", 4, 2209, 3000);
+    cadastrarConta("jhonas", 4, 2209, 2000);
    
     visualizar();
 

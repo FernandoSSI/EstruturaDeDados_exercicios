@@ -140,7 +140,46 @@ void depositar(int numero, int senha, float valor){
     }
 }
 
-
+void sacar(int numero, int senha, float valor){
+    if(inicio == NULL){
+        printf("vazia! :/\n");
+    } else{
+        if(numero == inicio->numero && senha == inicio->senha){
+            NO*aux = inicio;
+            aux -> saldo -= valor;
+            aux -> prox -> ant = NULL;
+            inicio= aux->prox;
+            aux -> prox = NULL;
+            
+            cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+            
+        } else if(numero == fim->numero && senha == fim->senha){
+            NO* aux = fim;
+            aux -> saldo -= valor;
+            aux->ant->prox= NULL;
+            fim = aux->ant;
+            aux -> ant = NULL;
+            
+            cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+        } else {
+            NO*aux= inicio;
+            while(numero != aux->numero && senha != aux->senha){
+                aux= aux->prox;
+            }
+            if(aux){
+                aux -> saldo -= valor;
+                aux -> ant->prox = aux->prox;
+                aux -> prox ->ant = aux ->ant;
+                aux->prox = NULL;
+                aux->ant= NULL;
+                
+                cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+            }else{
+                printf("Os dados não foram encontrados");
+            }
+        }
+    }
+}
 
 
 
@@ -176,7 +215,12 @@ int main(){
     depositar(1, 1234, 3200);
     depositar(6, 3090, 17.5);
     visualizar();
+    printf(" \n");
     
+    sacar(2, 2345, 10);
+    sacar(1, 1234, 1000);
+    sacar(6, 3090, 15.5);
+    visualizar();
     
 
   return 0;

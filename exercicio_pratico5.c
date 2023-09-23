@@ -99,7 +99,46 @@ void removerConta(int numero){
 }
 
 
-
+void depositar(int numero, int senha, float valor){
+    if(inicio == NULL){
+        printf("vazia! :/\n");
+    } else{
+        if(numero == inicio->numero && senha == inicio->senha){
+            NO*aux = inicio;
+            aux -> saldo += valor;
+            aux -> prox -> ant = NULL;
+            inicio= aux->prox;
+            aux -> prox = NULL;
+            
+            cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+            
+        } else if(numero == fim->numero && senha == fim->senha){
+            NO* aux = fim;
+            aux -> saldo += valor;
+            aux->ant->prox= NULL;
+            fim = aux->ant;
+            aux -> ant = NULL;
+            
+            cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+        } else {
+            NO*aux= inicio;
+            while(numero != aux->numero && senha != aux->senha){
+                aux= aux->prox;
+            }
+            if(aux){
+                aux -> saldo += valor;
+                aux -> ant->prox = aux->prox;
+                aux -> prox ->ant = aux ->ant;
+                aux->prox = NULL;
+                aux->ant= NULL;
+                
+                cadastrarConta(aux->nome, aux->numero, aux->senha, aux->saldo);
+            }else{
+                printf("Os dados não foram encontrados");
+            }
+        }
+    }
+}
 
 
 
@@ -126,11 +165,19 @@ int main(){
     cadastrarConta("tuco", 6, 3090, 3000 );
     visualizar();
     printf(" \n");
-    
+
     removerConta(4);
     removerConta(3);
     removerConta(5);
     visualizar();
+    printf(" \n");
+    
+    depositar(2, 2345, 20);
+    depositar(1, 1234, 3200);
+    depositar(6, 3090, 17.5);
+    visualizar();
+    
+    
 
   return 0;
 }

@@ -13,8 +13,6 @@ typedef struct no{
 
 NO *inicio = NULL;
 NO *fim = NULL;
-int tam = 0;
-
 
 void cadastrarConta(char * nome, int numero, int senha, float saldo){
     

@@ -22,49 +22,37 @@ NO_RESULT * topo_result= NULL;
 NO * fim = NULL;
 NO_RESULT * fim_result= NULL;
 
-void empilhar(char digit){
-    if(!isdigit(digit)){
-        NO * novo = malloc(sizeof(NO));
-        novo -> digit = digit;
-        novo -> prox = NULL;
-        novo -> ant = NULL;
-        if(!fim){
-            topo = novo;
-            fim = novo;
-        } else {
-            fim -> prox = novo;
-            novo -> ant = fim;
-            fim = novo;
-        }
+// função para empilhar os operadores
+void empilharOp(char digit){
+    NO * novo = malloc(sizeof(NO));
+    novo -> digit = digit;
+    novo -> prox = NULL;
+    novo -> ant = NULL;
+    if(!fim){
+        topo = novo;
+        fim = novo;
     } else {
-        NO_RESULT * novo = malloc(sizeof(NO_RESULT));
-        novo -> valor = digit - '0';
-        novo -> prox = NULL;
-        novo -> ant = NULL;
-        if(!fim_result){
-            topo_result = novo;
-            fim_result = novo;
-        } else {
-            fim_result -> prox = novo;
-            novo -> ant = fim_result;
-            fim_result = novo;
-        }
+        fim -> prox = novo;
+        novo -> ant = fim;
+        fim = novo;
+        
     }
 }
 
-NO * pop (NO * fim){
-    if(fim){
-        NO * aux = fim;
-        fim = fim -> prox;
-        aux -> prox = NULL;
+//função para empilhar numeros
+void empilharResult(float valor){
+    NO_RESULT * novo = malloc(sizeof(NO_RESULT));
+    novo -> valor = valor;
+    novo -> prox = NULL;
+    novo -> ant = NULL;
+    if(!fim_result){
+        topo_result = novo;
+        fim_result = novo;
+    } else {
+        fim_result -> prox = novo;
+        novo -> ant = fim_result;
+        fim_result = novo;
     }
-    return fim;
-}
-
-NO * push (NO * novo){
-    novo -> prox = fim;
-    fim = novo;
-    return novo;
 }
 
 // função para calcular baseado na operação
@@ -87,55 +75,45 @@ float operacao (float a, float b, char operador){
     }
 }
 
+// função para calcular e imprimir
 void calcular(char exp[]){
     for (int i =0; exp[i] != '\0'; i++){
-        empilhar(exp[i]);
+        if(!isdigit(exp[i])){
+            empilharOp(exp[i]);
+        } else {
+            empilharResult(exp[i]-'0');
+        }
     }
-
-/*
+    
     float a, b;
     char op;
     float result;
-    NO * aux = topo;
-    
+    NO * auxop = topo;
 
-    while(aux){
-        if(!isdigit(aux -> digit) && isdigit(aux -> prox -> digit) && isdigit(aux -> prox -> prox -> digit) ){
-            op = aux-> digit;
-            b = atof(aux ->prox-> digit);
-            a = atof(aux ->prox-> prox-> digit);
-            result = operacao(a, b, op);
-            
+    while(auxop){
+        NO_RESULT * aux = topo_result;
+        a = aux -> valor;
+        b = aux -> prox -> valor;
+        op = auxop -> digit;
+        result = operacao(a, b, op);
         
-            
-        }
-    }*/
-    
-}
-
-
-
-
-
-void imprimir(){
-    NO_RESULT* aux = topo_result;
-    while(aux){
-        printf("%.2f\n", aux-> valor);
-        aux = aux->prox;
+        empilharResult(result);
+        
+        topo_result = aux -> prox -> prox;
+        topo_result -> ant = NULL;
+        aux->prox -> prox = NULL;
+        aux->prox -> ant = NULL;
+        free(aux->prox);
+        free(aux);
+        
+        auxop = auxop -> prox;
     }
     
-    NO * auxr = topo;
-    while(auxr){
-        printf("%c\n", auxr-> digit);
-        auxr = auxr->prox;
-    }
+    printf("%s: %.2f\n",exp, topo_result-> valor);  
 }
 
 int main() {
     
-    calcular("42+56-*");
-    
-    
-    imprimir();
+    calcular("12-45+*");
     return 0;
 }

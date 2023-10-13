@@ -14,6 +14,7 @@ NO * topo = NULL;
 void add_cons(char letra){
     NO * novo = malloc(sizeof(NO));
     novo -> cons = letra;
+    novo -> prox = NULL;
     if(!topo){
         topo = novo;
     } else {
@@ -26,6 +27,7 @@ void del(){
     if(topo){
         NO*aux = topo;
         topo = topo->prox;
+        
         free(aux);
     } else{
         printf("Pilha vazia");
@@ -45,13 +47,18 @@ void criptografar(char palavra[]){
         || palavra[i] == 'u'){
             p1[i]= palavra[i];
             i++;
-        } else{
+        } else if(palavra[i] == ' '){
+            p1[i]= ' ';
+            i++;
+        } else {
             j=i;
             while(palavra[j]!= 'a' 
                 &&palavra[j]!= 'e' 
                 &&palavra[j]!= 'i' 
                 &&palavra[j]!= 'o' 
-                &&palavra[j]!= 'u' ){
+                &&palavra[j]!= 'u'
+                &&palavra[j]!= '\0'
+                &&palavra[j]!= ' '){
                 add_cons(palavra[j]);
                 j++;
             }
@@ -70,14 +77,15 @@ void criptografar(char palavra[]){
         }
     }
    
-    
-    printf("%s",p1);
+    p1[i] = '\0';
+    printf("%s\n",p1);
     
 }
 
 
 int main() {
     
-    criptografar("fernando");
+    criptografar("fernando dtfaipq");
+    criptografar("python e chato");
     return 0;
 }
